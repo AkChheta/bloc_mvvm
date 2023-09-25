@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bloc_mvvm/core/api/base_api_services.dart';
+// import 'package:bloc_mvvm/core/api/base_api_services.dart';
 import 'package:bloc_mvvm/core/errors/app_exceptions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-class NetworkApiServices extends BaseApiServices {
-  @override
+class NetworkApiServices
+// extends BaseApiServices
+{
+  // @override
   Future getApi(String url) async {
     if (kDebugMode) {
       print(url);
@@ -27,7 +29,7 @@ class NetworkApiServices extends BaseApiServices {
     return responseJson;
   }
 
-  @override
+  // @override
   Future postApi(var data, String url) async {
     if (kDebugMode) {
       print(url);
@@ -59,6 +61,7 @@ class NetworkApiServices extends BaseApiServices {
         dynamic responseJson = jsonDecode(response.body);
         return responseJson;
       case 400:
+        // 404
         throw InvalidUrlExceptions;
       default:
         throw FetchDataExceptions(

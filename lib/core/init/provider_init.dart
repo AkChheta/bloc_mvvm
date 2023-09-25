@@ -17,7 +17,7 @@ class ProviderInit extends StatelessWidget {
           create: (_) => SplashBloc(),
         ),
         BlocProvider(
-          create: (_) => HomeBloc(HomeRepositoriesImpl(NetworkApiServices())),
+          create: (_) => HomeBloc(HomeRepositoriesImpl()),
         ),
       ],
       child: child,

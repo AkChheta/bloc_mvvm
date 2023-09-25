@@ -3,6 +3,7 @@ import 'package:bloc_mvvm/core/api/network_api_services.dart';
 import 'package:bloc_mvvm/core/routes/app_router.gr.dart';
 import 'package:bloc_mvvm/core/widgets/internet/internet_widget.dart';
 import 'package:bloc_mvvm/features/dashBoard/presentation/pages/dash_board_page.dart';
+import 'package:bloc_mvvm/features/dashBoard/presentation/pages/first_apge.dart';
 import 'package:bloc_mvvm/features/home/data/repositories/home_repositories.dart';
 import 'package:bloc_mvvm/features/home/presentation/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,26 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeBloc(HomeRepositoriesImpl(NetworkApiServices()))
-        ..add(HomeFetchDataEvent()),
+      create: (context) =>
+          HomeBloc(HomeRepositoriesImpl())..add(HomeFetchDataEvent())
+      // ..add(HomeUserDetailsEvent())
+      ,
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            InkWell(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (route) => false);
+                  BlocProvider.of<HomeBloc>(context)
+                      .add(HomeUserDetailsEvent());
+                  // HomeBloc(HomeRepositoriesImpl()).add(HomeUserDetailsEvent());
+                },
+                child: Icon(Icons.home))
+          ],
+        ),
         body: InkWell(
           onTap: () {
             context.router.replace(DashBordRoute());
@@ -31,6 +49,7 @@ class _HomePageState extends State<HomePage> {
           child: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
               print("1::::::::::::::::::::::::::::::::");
+
               if (state is HomeLoadingState) {
                 print("2::::::::::::::::::::::::::::::::");
                 return const Center(
@@ -43,8 +62,9 @@ class _HomePageState extends State<HomePage> {
                   print("${state.message == 'No Internet'}");
                   return InternetWidget(onTap: () {
                     print("kdnvjnv");
-                    HomeBloc(HomeRepositoriesImpl(NetworkApiServices()))
+                    BlocProvider.of<HomeBloc>(context)
                         .add(HomeFetchDataEvent());
+                    // HomeBloc(HomeRepositoriesImpl()).add(HomeFetchDataEvent());
                   });
                 } else {
                   print("5::::::::::::::::::::::::::::::::");
@@ -67,6 +87,25 @@ class _HomePageState extends State<HomePage> {
                       leading: CircleAvatar(
                         backgroundImage:
                             NetworkImage(userList[index].avatar.toString()),
+                      ),
+                    );
+                  },
+                );
+
+                // second api calling
+              } else if (state is HomeUserDetailsState) {
+                final userDetailsList = state.usersdetails;
+
+                return ListView.builder(
+                  itemCount: userDetailsList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(userDetailsList[index].email.toString()),
+                      subtitle: Text(
+                          '${userDetailsList[index].name} ${userDetailsList[index].id.toString()}'),
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            userDetailsList[index].avatar.toString()),
                       ),
                     );
                   },

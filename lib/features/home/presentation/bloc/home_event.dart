@@ -8,3 +8,6 @@ abstract class HomeEvent extends Equatable {
 }
 
 class HomeFetchDataEvent extends HomeEvent {}
+
+//  second api calling
+class HomeUserDetailsEvent extends HomeEvent {}

@@ -19,9 +19,15 @@ class AppRouter extends $AppRouter {
           AutoRoute(page: FirstNavigatorRoute.page, children: [
             // NestedNavigater page
             AutoRoute(page: FirstRoute.page, initial: true),
-            AutoRoute(page: DetailRoute.page),
+
+            // AutoRoute(page: DetailRoute.page),
+            CustomRoute(
+                page: DetailRoute.page,
+                transitionsBuilder: TransitionsBuilders.slideLeft),
           ]),
-          AutoRoute(page: SecondsRoute.page),
+          AutoRoute(
+            page: SecondsRoute.page,
+          ),
         ]),
       ];
 }
